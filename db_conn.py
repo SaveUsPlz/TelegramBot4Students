@@ -57,6 +57,13 @@ class DBConnection:
             confirm_code VARCHAR (255)
         )
         """)
+        self.exec("""
+        CREATE TABLE if not exists stage (
+            user_id  VARCHAR (255) REFERENCES user (id) ON DELETE CASCADE NOT NULL primary key,
+            step varchar(255) not null,
+            params text
+        )
+        """)
 
 
     def exec(self, sql):

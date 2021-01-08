@@ -1,4 +1,6 @@
 from db_conn import DBConnection
+from stage import Stage
+from stagerepository import StageRepository
 from user_repository import UserRepository
 from user import User
 from group import Group
@@ -23,6 +25,7 @@ if __name__ == '__main__':
     dbconn = DBConnection("e:/botdb.sqllite")
     userRepo = UserRepository(dbconn)
     groupRepo = GroupRepository(dbconn)
+    stageRepo = StageRepository(dbconn)
 
     groups = groupRepo.list_group()
     print("Groups:", groups)
@@ -63,3 +66,17 @@ if __name__ == '__main__':
     print("Confirmed : ", confirmedTeacher)
     userRepo.add_teacher_group(teacher.id, groups[0].id)
     print("teacher groups:", userRepo.get_teacher_groups(teacher.id))
+
+    stage = stageRepo.get_stage(teacher.id)
+    print("Stage: ", stage)
+
+    stageRepo.set_stage(Stage(teacher.id, "Step1", {"param": "value"}))
+    stage = stageRepo.get_stage(teacher.id)
+    print("Stage1: ", stage)
+
+    stage.params['param2'] = "value2"
+    stage.step = "Step2"
+    stageRepo.set_stage(stage)
+    stage = stageRepo.get_stage(teacher.id)
+    print("Stage2: ", stage)
+

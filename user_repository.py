@@ -66,6 +66,16 @@ class UserRepository:
         c.close()
         self.conn.conn().commit()
 
+    def remove_teacher_group(self, teacherid, groupid):
+        c = self.conn.conn().cursor()
+        try:
+            c.execute("delete from where user_id = :tid and group_id = :gid)",
+                      {"gid": groupid, "tid": teacherid})
+        except Error as e:
+            print(f"The error '{e}' occurred")
+        c.close()
+        self.conn.conn().commit()
+
     def get_student(self, userid: str) -> Student:
         c = self.conn.conn().cursor()
         c.execute("select group_id from student where user_id = :id", {"id": userid})
