@@ -65,6 +65,37 @@ class DBConnection:
         )
         """)
 
+        self.exec("""
+        CREATE TABLE if not exists task (
+            id VARCHAR (255) NOT NULL primary key
+            user_id  VARCHAR (255) REFERENCES user (id) ON DELETE CASCADE NOT NULL,
+            group_id  VARCHAR (255) REFERENCES groups (id) NOT NULL,
+            subject varchar(255) not null,
+            due_date text not null,
+            task_text text not null
+        )
+        """)
+
+        self.exec("""
+        CREATE TABLE if not exists task (
+            id VARCHAR (255) NOT NULL primary key
+            user_id  VARCHAR (255) REFERENCES user (id) ON DELETE CASCADE NOT NULL,
+            group_id  VARCHAR (255) REFERENCES groups (id) NOT NULL,
+            subject varchar(255) not null,
+            due_date integer not null,
+            task_text text not null
+        )
+        """)
+
+        self.exec("""
+        CREATE TABLE if not exists done_task (
+            id VARCHAR (255) NOT NULL primary key
+            user_id  VARCHAR (255) REFERENCES user (id) ON DELETE CASCADE NOT NULL,
+            task_id  VARCHAR (255) REFERENCES task (id) ON DELETE CASCADE NOT NULL,
+            done_date integer not null
+        )
+        """)
+        print("DB structure created")
 
     def exec(self, sql):
         c = self.connection.cursor()
