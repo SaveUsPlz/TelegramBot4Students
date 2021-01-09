@@ -8,7 +8,6 @@ class DBConnection:
         try:
             self.connection = sqlite3.connect(path)
             print("Connection to SQLite DB successful")
-            self.initdb()
         except Error as e:
             print(f"The error '{e}' occurred")
 
@@ -67,18 +66,7 @@ class DBConnection:
 
         self.exec("""
         CREATE TABLE if not exists task (
-            id VARCHAR (255) NOT NULL primary key
-            user_id  VARCHAR (255) REFERENCES user (id) ON DELETE CASCADE NOT NULL,
-            group_id  VARCHAR (255) REFERENCES groups (id) NOT NULL,
-            subject varchar(255) not null,
-            due_date text not null,
-            task_text text not null
-        )
-        """)
-
-        self.exec("""
-        CREATE TABLE if not exists task (
-            id VARCHAR (255) NOT NULL primary key
+            id VARCHAR (255) NOT NULL primary key,
             user_id  VARCHAR (255) REFERENCES user (id) ON DELETE CASCADE NOT NULL,
             group_id  VARCHAR (255) REFERENCES groups (id) NOT NULL,
             subject varchar(255) not null,
@@ -89,7 +77,7 @@ class DBConnection:
 
         self.exec("""
         CREATE TABLE if not exists done_task (
-            id VARCHAR (255) NOT NULL primary key
+            id VARCHAR (255) NOT NULL primary key,
             user_id  VARCHAR (255) REFERENCES user (id) ON DELETE CASCADE NOT NULL,
             task_id  VARCHAR (255) REFERENCES task (id) ON DELETE CASCADE NOT NULL,
             done_date integer not null
@@ -101,4 +89,7 @@ class DBConnection:
         c = self.connection.cursor()
         c.execute(sql)
         c.close()
+
+    def close(self):
+        self.connection.close()
 

@@ -37,3 +37,10 @@ class StageRepository:
 
     def set_stage_data(self, user_id: str, step: str, params: dict = {}):
         self.set_stage(Stage(user_id, step, params))
+
+    def delete_stage(self, stage_id):
+        c = self.conn.conn().cursor()
+        c.execute("delete from stage where user_id = :id",
+                  {"id": stage_id})
+        c.close()
+        self.conn.conn().commit()

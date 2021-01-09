@@ -111,3 +111,15 @@ class UserRepository:
         c.execute("update teacher set confirm_code = null, confirmed = true where user_id = :id", {"id": user_id})
         c = self.conn.conn().commit();
         return self.get_teacher(user_id)
+
+    def get_availible_teacher_groups(self, user_id: str):
+        c = self.conn.conn().cursor()
+        c.execute("select g.id, g.name from groups g left join teacher_group tg on tg.group_id = g.id and tg.user_id = :id where "
+                  "  tg.group_id is null order by g.name", {"id": user_id})
+        results = c.fetchall()
+        groups = []
+        for i in results:
+            groups.append(Group(i[0], i[1]))
+        c.close()
+        return groups
+
