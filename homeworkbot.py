@@ -51,6 +51,10 @@ class HomeworkBot:
             await self.handle_start_command(message)
 
     async def handle_start_command(self, message: types.Message):
+        if message.from_user.id == self.admin_id:
+            await message.reply("Привет, ADMIN ! Введи код для подтверждения учителя !")
+            return
+
         user = self.userRepo.find_user(message.chat.id)
         if user is None:
             imUser_kb = types.InlineKeyboardButton(text="Я ученик", callback_data="step1.1:student")
@@ -64,6 +68,7 @@ class HomeworkBot:
             await self.show_main_user_menu(message.chat.id, user)
 
     async def show_main_user_menu(self, chat_id: str, user: User):
+
         if user is None:
             return
 
@@ -88,6 +93,10 @@ class HomeworkBot:
         self.dbconn.close()
 
     async def handle_callback(self, query: types.CallbackQuery):
+        if query.from_user.id == self.admin_id:
+            await message.reply("Привет, ADMIN ! Введи код для подтверждения учителя !")
+            return
+
         await query.message.edit_reply_markup()
         answer_data = query.data
         chat_id = query.message.chat.id
